@@ -4,6 +4,7 @@ import 'package:cabdriver/helpers/stars_method.dart';
 import 'package:cabdriver/helpers/style.dart';
 import 'package:cabdriver/providers/app_provider.dart';
 import 'package:cabdriver/providers/user.dart';
+import 'package:cabdriver/screens/amb_requet.dart';
 import 'package:cabdriver/screens/login.dart';
 import 'package:cabdriver/screens/ride_request.dart';
 import 'package:cabdriver/screens/splash.dart';
@@ -52,7 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
     UserProvider _user = Provider.of<UserProvider>(context, listen: false);
     AppStateProvider _app =
         Provider.of<AppStateProvider>(context, listen: false);
-    _user.updateUserData({"id": _id, "position": _app.position.toJson()});
+
+    // _user.updateUserData({"id": _id, "position": _app.position.toJson()});
+    _user.updateUserData({"id": _id});
   }
 
   @override
@@ -89,45 +92,50 @@ class _MyHomePageState extends State<MyHomePage> {
               MapScreen(scaffoldState),
               Positioned(
                   top: 60,
-                  left: MediaQuery.of(context).size.width / 6 ,
+                  left: MediaQuery.of(context).size.width / 6,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: grey,
-                            blurRadius: 17
-                          )
-                        ]
-                      ),
+                          color: white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [BoxShadow(color: grey, blurRadius: 17)]),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              child:userProvider.userModel?.phone  == null ? CircleAvatar(
-                                radius: 30,
-                                child: Icon(Icons.person_outline, size: 25,),
-                              ) : CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(userProvider.userModel?.photo),
-                              ),
+                              child: userProvider.userModel?.phone == null
+                                  ? CircleAvatar(
+                                      radius: 30,
+                                      child: Icon(
+                                        Icons.person_outline,
+                                        size: 25,
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage: NetworkImage(
+                                          userProvider.userModel?.photo),
+                                    ),
                             ),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Container(
                               height: 60,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CustomText(text: userProvider.userModel.name, size: 18, weight: FontWeight.bold,),
+                                  CustomText(
+                                    text: userProvider.userModel.name,
+                                    size: 18,
+                                    weight: FontWeight.bold,
+                                  ),
                                   stars(
-                                    rating: userProvider.userModel.rating,
-                                    votes: userProvider.userModel.votes
-                                  )
+                                      rating: userProvider.userModel.rating,
+                                      votes: userProvider.userModel.votes)
                                 ],
                               ),
                             ),
@@ -138,17 +146,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   )),
               //  ANCHOR Draggable DRIVER
               Visibility(
-                  visible: appState.show == Show.RIDER,
-                  child: RiderWidget()),
+                  visible: appState.show == Show.RIDER, child: RiderWidget()),
             ],
           )),
     );
 
     switch (appState.hasNewRideRequest) {
+      case true:
+        return RideRequestScreen();
+    }
+    switch (appState.hasNewAmbRequest) {
       case false:
         return home;
       case true:
-        return RideRequestScreen();
+        return AmbRequestScreen();
       default:
         return home;
     }

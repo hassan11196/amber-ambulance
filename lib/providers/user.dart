@@ -76,7 +76,7 @@ class UserProvider with ChangeNotifier {
             name: name.text.trim(),
             email: email.text.trim(),
             phone: phone.text.trim(),
-            position: position.toJson(),
+            // position: position.toJson(),
             token: _deviceToken);
       });
       return true;

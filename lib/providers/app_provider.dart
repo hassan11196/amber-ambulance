@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cabdriver/helpers/constants.dart';
 import 'package:cabdriver/helpers/style.dart';
+import 'package:cabdriver/models/amb_Request.dart';
 import 'package:cabdriver/models/ride_Request.dart';
 import 'package:cabdriver/models/rider.dart';
 import 'package:cabdriver/models/route.dart';
@@ -47,8 +48,10 @@ class AppStateProvider with ChangeNotifier {
 
   Location location = new Location();
   bool hasNewRideRequest = false;
+  bool hasNewAmbRequest = false;
   UserServices _userServices = UserServices();
   RideRequestModel rideRequestModel;
+  AmbRequestModel ambRequestModel;
   RequestModelFirebase requestModelFirebase;
 
   RiderModel riderModel;
@@ -74,6 +77,9 @@ class AppStateProvider with ChangeNotifier {
         onResume: handleOnResume);
     _getUserLocation();
     Geolocator().getPositionStream().listen(_userCurrentLocationUpdate);
+    Geolocator()
+        .getCurrentPosition()
+        .then((value) => {print("FHELLO" + value.toString())});
   }
 
   // ANCHOR LOCATION METHODS
@@ -88,7 +94,7 @@ class AppStateProvider with ChangeNotifier {
       "position": updatedPosition.toJson()
     };
     if (distance >= 50) {
-      if(show == Show.RIDER){
+      if (show == Show.RIDER) {
         sendRequest(coordinates: requestModelFirebase.getCoordinates());
       }
       _userServices.updateUserData(values);
@@ -245,9 +251,14 @@ class AppStateProvider with ChangeNotifier {
   }
 
   _handleNotificationData(Map<String, dynamic> data) async {
-    hasNewRideRequest = true;
-    rideRequestModel = RideRequestModel.fromMap(data['data']);
-    riderModel = await _riderServices.getRiderById(rideRequestModel.userId);
+    // hasNewRideRequest = true;
+    hasNewAmbRequest = true;
+    print("NEED AMB");
+    // rideRequestModel = RideRequestModel.fromMap(data['data']);
+    // riderModel = await _riderServices.getRiderById(rideRequestModel.userId);
+
+    ambRequestModel = AmbRequestModel.fromMap(data['data']);
+    // riderModel = await _riderServices.getRiderById(ambRequestModel.pid);
     notifyListeners();
   }
 
