@@ -124,12 +124,15 @@ class UserProvider with ChangeNotifier {
       _status = Status.Unauthenticated;
     } else {
       _user = firebaseUser;
+      print("USSEERR");
+      print(_user);
       await prefs.setString("id", firebaseUser.uid);
 
       _userModel = await _userServices.getUserById(user.uid).then((value) {
         _status = Status.Authenticated;
         return value;
       });
+      print(_userModel);
     }
     notifyListeners();
   }
