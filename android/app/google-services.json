@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "879963632781",
+    "project_id": "fb-wit-ai",
+    "storage_bucket": "fb-wit-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879963632781:android:a3fc992390c124ceac9ec4",
+        "android_client_info": {
+          "package_name": "com.ignitors.amber_ambulance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "879963632781-atd1m9bo4b686sl1kkf5knuhrm75etrg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCexGJEJFnXQaRvkMaiQs7n-mQCalBDk6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "879963632781-atd1m9bo4b686sl1kkf5knuhrm75etrg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
