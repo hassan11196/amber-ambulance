@@ -1,108 +1,144 @@
+import 'package:cabdriver/models/Clocation.dart';
+import 'package:cabdriver/models/patient.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'dart:convert';
+import 'caretaker.dart';
 
 class AmbRequestModel {
-  static const PID = "pid";
-  static const PATIENT_NAME = "patient_name";
-  static const CARETAKER_NAME = "caretaker_name";
-  static const CARETAKER_CONTACT = "caretaker_contact";
-  static const PICKUP_LOCATION = "pickup_location";
-  static const PICKUP_LANDMARKS = "pickup_landmark";
+  static const ID = "id";
+  static const PATIENT = "patient";
+  static const CARETAKER = "caretaker";
+  static const PICKUP = "pickup";
   static const DESTINATION = "destination";
-  static const DESTINATION_NAME = "destination_name";
   static const PATIENT_CONDITION = "patient_condition";
+  static const REASON_FOR_TRANSPORT = "reason_for_transport";
+  static const DISTANCE = "distance";
+  static const STATUS = "status";
   static const SPECIAL_NEEDS = "special_needs";
 
-  String _pid;
-  String _patient_name;
-  String _caretaker_name;
-  String _caretaker_contact;
-  // _pickup_location
-  // String _pickup_landmarks;
-  // _destination
-  String _destination_name;
-  String _patient_condition;
-  // String _special_needs;
+  String _id;
+  Caretaker _caretaker;
+  Patient _patient;
+  CLocation _pickup;
+  CLocation _destination;
+  String _patientCondition;
+  String _reasonForTransport;
+  List<String> _specialNeeds;
+  String _distance;
+  String _status;
 
-  String get pid => _pid;
+  String get id => _id;
 
-  String get patient_name => _patient_name;
+  Caretaker get caretaker => _caretaker;
+  set caretaker(Caretaker caretaker) => _caretaker = caretaker;
+  Patient get patient => _patient;
+  set patient(Patient patient) => _patient = patient;
+  CLocation get pickup => _pickup;
+  set pickup(CLocation pickup) => _pickup = pickup;
+  CLocation get destination => _destination;
+  set destination(CLocation destination) => _destination = destination;
+  String get patientCondition => _patientCondition;
+  set patientCondition(String patientCondition) =>
+      _patientCondition = patientCondition;
+  String get reasonForTransport => _reasonForTransport;
+  set reasonForTransport(String reasonForTransport) =>
+      _reasonForTransport = reasonForTransport;
+  List<String> get specialNeeds => _specialNeeds;
+  set specialNeeds(List<String> specialNeeds) => _specialNeeds = specialNeeds;
+  String get distance => _distance;
+  set distance(String distance) => _distance = distance;
+  String get status => _status;
 
-  String get caretaker_name => _caretaker_name;
-
-  String get caretaker_contact => _caretaker_contact;
-
-  String get destination_name => _destination_name;
-
-  String get patient_condition => _patient_condition;
-
-  AmbRequestModel.fromMap(Map data) {
-    String _d = data[DESTINATION];
-    _pid = data[PID];
-    _patient_name = data[PATIENT_NAME];
-    _caretaker_name = data[CARETAKER_NAME];
-    _caretaker_contact = data[CARETAKER_CONTACT];
-    _destination_name = data[DESTINATION_NAME];
-    _patient_condition = data[PATIENT_CONDITION];
-    // _destination = _d.substring(0, _d.indexOf(','));
-    // _dLatitude = double.parse(data[DESTINATION_LAT]);
-    // _dLongitude = double.parse(data[DESTINATION_LNG]);
-    // _uLatitude = double.parse(data[USER_LAT]);
-    // _uLongitude = double.parse(data[USER_LAT]);
-    // _distance = Distance.fromMap({
-    //   "text": data[DISTANCE_TEXT],
-    //   "value": int.parse(data[DISTANCE_VALUE])
-    // });
+  AmbRequestModel.fromMap(Map json) {
+    _id = json['id'];
+    _caretaker = json[CARETAKER] != null
+        ? new Caretaker.fromJson(jsonDecode(json[CARETAKER]))
+        : null;
+    _patient = json['patient'] != null
+        ? new Patient.fromMap(jsonDecode(json[PATIENT]))
+        : null;
+    _pickup = json[PICKUP] != null
+        ? new CLocation.fromMap(jsonDecode(json[PICKUP]))
+        : null;
+    _destination = json[DESTINATION] != null
+        ? new CLocation.fromMap(jsonDecode(json[DESTINATION]))
+        : null;
+    _patientCondition = json[PATIENT_CONDITION];
+    _reasonForTransport = json[REASON_FOR_TRANSPORT];
+    _specialNeeds = jsonDecode(json[SPECIAL_NEEDS]).cast<String>();
+    _distance = json[DISTANCE];
+    _status = json[STATUS];
   }
 }
 
-// class Distance {
-//   String text;
-//   int value;
+class AmbRequestModelFirebase {
+  static const ID = "id";
+  static const PATIENT = "patient";
+  static const CARETAKER = "caretaker";
+  static const PICKUP = "pickup";
+  static const DESTINATION = "destination";
+  static const PATIENT_CONDITION = "patient_condition";
+  static const REASON_FOR_TRANSPORT = "reason_for_transport";
+  static const DISTANCE = "distance";
+  static const STATUS = "status";
+  static const SPECIAL_NEEDS = "special_needs";
 
-//   Distance.fromMap(Map data) {
-//     text = data["text"];
-//     value = data["value"];
-//   }
+  String _id;
+  Caretaker _caretaker;
+  Patient _patient;
+  CLocation _pickup;
+  CLocation _destination;
+  String _patientCondition;
+  String _reasonForTransport;
+  List<String> _specialNeeds;
+  String _distance;
+  String _status;
 
-//   Map toJson() => {"text": text, "value": value};
-// }
+  String get id => _id;
 
-// class RequestModelFirebase {
-//   static const ID = "id";
-//   static const USERNAME = "username";
-//   static const USER_ID = "userId";
-//   static const DRIVER_ID = "driverId";
-//   static const STATUS = "status";
-//   static const POSITION = "position";
-//   static const DESTINATION = "destination";
+  Caretaker get caretaker => _caretaker;
+  set caretaker(Caretaker caretaker) => _caretaker = caretaker;
+  Patient get patient => _patient;
+  set patient(Patient patient) => _patient = patient;
+  CLocation get pickup => _pickup;
+  set pickup(CLocation pickup) => _pickup = pickup;
+  CLocation get destination => _destination;
+  set destination(CLocation destination) => _destination = destination;
+  String get patientCondition => _patientCondition;
+  set patientCondition(String patientCondition) =>
+      _patientCondition = patientCondition;
+  String get reasonForTransport => _reasonForTransport;
+  set reasonForTransport(String reasonForTransport) =>
+      _reasonForTransport = reasonForTransport;
+  List<String> get specialNeeds => _specialNeeds;
+  set specialNeeds(List<String> specialNeeds) => _specialNeeds = specialNeeds;
+  String get distance => _distance;
+  set distance(String distance) => _distance = distance;
+  String get status => _status;
+  set status(String status) => _status = status;
 
-//   String _id;
-//   String _username;
-//   String _userId;
-//   String _driverId;
-//   String _status;
-//   Map _position;
-//   Map _destination;
+  AmbRequestModelFirebase.fromSnapshot(DocumentSnapshot snapshot) {
+    _id = snapshot.data()['id'];
+    _status = snapshot.data()[STATUS];
+    // _caretaker = snapshot.data()[CARETAKER] != null
+    //     ? new Caretaker.fromJson((snapshot.data()[CARETAKER]))
+    //     : null;
+    // _patient = snapshot.data()['patient'] != null
+    //     ? new Patient.fromMap((snapshot.data()[PATIENT]))
+    //     : null;
+    _pickup = snapshot.data()[PICKUP] != null
+        ? new CLocation.fromMap((snapshot.data()[PICKUP]))
+        : null;
+    _destination = snapshot.data()[DESTINATION] != null
+        ? new CLocation.fromMap((snapshot.data()[DESTINATION]))
+        : null;
+    _patientCondition = snapshot.data()[PATIENT_CONDITION];
+    _reasonForTransport = snapshot.data()[REASON_FOR_TRANSPORT];
+    // _specialNeeds = jsonDecode(snapshot.data()[SPECIAL_NEEDS]).cast<String>();
+    _distance = snapshot.data()[DISTANCE];
+  }
 
-//   String get id => _id;
-//   String get username => _username;
-//   String get userId => _userId;
-//   String get driverId => _driverId;
-//   String get status => _status;
-//   Map get position => _position;
-//   Map get destination => _destination;
-
-//   RequestModelFirebase.fromSnapshot(DocumentSnapshot snapshot) {
-//     _id = snapshot.data()[ID];
-//     _username = snapshot.data()[USERNAME];
-//     _userId = snapshot.data()[USER_ID];
-//     _driverId = snapshot.data()[DRIVER_ID];
-//     _status = snapshot.data()[STATUS];
-//     _position = snapshot.data()[POSITION];
-//     _destination = snapshot.data()[DESTINATION];
-//   }
-
-//   LatLng getCoordinates() =>
-//       LatLng(_position['latitude'], _position['longitude']);
-// }
+  LatLng getCoordinates() => LatLng(_pickup.position.lat, _pickup.position.lng);
+}

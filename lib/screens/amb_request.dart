@@ -25,7 +25,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
     super.initState();
     AppStateProvider _state =
         Provider.of<AppStateProvider>(context, listen: false);
-    _state.listenToRequest(id: _state.ambRequestModel.pid, context: context);
+    _state.listenToRequest(id: _state.ambRequestModel.id, context: context);
   }
 
   @override
@@ -53,6 +53,20 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(40)),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius: 45,
+                    child: Icon(
+                      Icons.person,
+                      size: 65,
+                      color: white,
+                    ),
+                  ),
+                ),
                 // if (appState.riderModel.photo == null)
                 //   Container(
                 //     decoration: BoxDecoration(
@@ -84,7 +98,8 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomText(text: appState.riderModel?.name ?? "Patient"),
+                CustomText(
+                    text: appState.ambRequestModel.patient.name ?? "Patient"),
               ],
             ),
             SizedBox(height: 10),
@@ -97,45 +112,45 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomText(
-                    text: "Destiation",
+                    text: "Destination",
                     color: grey,
                   ),
                 ],
               ),
               subtitle: FlatButton.icon(
                   onPressed: () async {
-                    // LatLng destinationCoordiates = LatLng(
-                    //     appState.AmbRequestModel.dLatitude,
-                    //     appState.AmbRequestModel.dLongitude);
-                    // appState.addLocationMarker(
-                    //     destinationCoordiates,
-                    //     appState.AmbRequestModel?.destination ?? "Nada",
-                    //     "Destination Location");
-                    // showModalBottomSheet(
-                    //     context: context,
-                    //     builder: (BuildContext bc) {
-                    //       return Container(
-                    //         height: 400,
-                    //         child: GoogleMap(
-                    //           initialCameraPosition: CameraPosition(
-                    //               target: destinationCoordiates, zoom: 13),
-                    //           onMapCreated: appState.onCreate,
-                    //           myLocationEnabled: true,
-                    //           mapType: MapType.normal,
-                    //           tiltGesturesEnabled: true,
-                    //           compassEnabled: false,
-                    //           markers: appState.markers,
-                    //           onCameraMove: appState.onCameraMove,
-                    //           polylines: appState.poly,
-                    //         ),
-                    //       );
-                    //     });
+                    LatLng destinationCoordiates = LatLng(
+                        appState.ambRequestModel.destination.position.lat,
+                        (appState.ambRequestModel.destination.position.lng));
+                    appState.addLocationMarker(
+                        destinationCoordiates,
+                        appState.ambRequestModel.destination.name ?? "Nada",
+                        "Destination Location");
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext bc) {
+                          return Container(
+                            height: 400,
+                            child: GoogleMap(
+                              initialCameraPosition: CameraPosition(
+                                  target: destinationCoordiates, zoom: 13),
+                              onMapCreated: appState.onCreate,
+                              myLocationEnabled: true,
+                              mapType: MapType.normal,
+                              tiltGesturesEnabled: true,
+                              compassEnabled: false,
+                              markers: appState.markers,
+                              onCameraMove: appState.onCameraMove,
+                              polylines: appState.poly,
+                            ),
+                          );
+                        });
                   },
                   icon: Icon(
                     Icons.location_on,
                   ),
                   label: CustomText(
-                    text: appState.ambRequestModel?.destination_name ??
+                    text: appState.ambRequestModel?.destination.name ??
                         "Undefined",
                     weight: FontWeight.bold,
                   )),
@@ -162,7 +177,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                 CustomBtn(
                   text: "Accept",
                   onTap: () async {
-                    if (appState.requestModelFirebase.status != "pending") {
+                    if (appState.ambRequestModelFirebase.status != "PENDING") {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -189,14 +204,14 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                           });
                     } else {
                       appState.clearMarkers();
-
+                      appState.changeAmbRequestStatus();
                       appState.acceptRequest(
-                          requestId: appState.ambRequestModel.pid,
+                          requestId: appState.ambRequestModel.id,
                           driverId: userProvider.userModel.id);
                       appState.changeWidgetShowed(showWidget: Show.RIDER);
                       appState.sendRequest(
-                          coordinates:
-                              appState.requestModelFirebase.getCoordinates());
+                          coordinates: appState.ambRequestModelFirebase
+                              .getCoordinates());
 //                      showDialog(
 //                          context: context,
 //                          builder: (BuildContext context) {
@@ -273,7 +288,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                   text: "Reject",
                   onTap: () {
                     appState.clearMarkers();
-                    // appState.changeAmbRequestStatus();
+                    appState.changeAmbRequestStatus();
                   },
                   bgColor: red,
                   shadowColor: Colors.redAccent,

@@ -26,6 +26,12 @@ class AppStateProvider with ChangeNotifier {
   static const CANCELLED = 'cancelled';
   static const PENDING = 'pending';
   static const EXPIRED = 'expired';
+
+  static const AMB_PENDING = 'PENDING';
+  static const AMB_ENROUTE_TO_HOSPITAL = "ENROUTE_TO_HOSPITAL";
+  static const AMB_ENROUTE_TO_PATIENT = "ENROUTE_TO_PATIENT";
+  static const AMB_COMPLETE = "COMPLETE";
+  static const AMB_CANCELLED = "CANCELLED";
   // ANCHOR: VARIABLES DEFINITION
   Set<Marker> _markers = {};
   Set<Polyline> _poly = {};
@@ -52,10 +58,11 @@ class AppStateProvider with ChangeNotifier {
   UserServices _userServices = UserServices();
   RideRequestModel rideRequestModel;
   AmbRequestModel ambRequestModel;
-  RequestModelFirebase requestModelFirebase;
+  AmbRequestModelFirebase ambRequestModelFirebase;
 
   RiderModel riderModel;
   RiderServices _riderServices = RiderServices();
+
   double distanceFromRider = 0;
   double totalRideDistance = 0;
   StreamSubscription<QuerySnapshot> requestStream;
@@ -95,7 +102,7 @@ class AppStateProvider with ChangeNotifier {
     };
     if (distance >= 50) {
       if (show == Show.RIDER) {
-        sendRequest(coordinates: requestModelFirebase.getCoordinates());
+        sendRequest(coordinates: ambRequestModelFirebase.getCoordinates());
       }
       _userServices.updateUserData(values);
       await prefs.setDouble('lat', updatedPosition.latitude);
@@ -258,7 +265,9 @@ class AppStateProvider with ChangeNotifier {
     // riderModel = await _riderServices.getRiderById(rideRequestModel.userId);
 
     ambRequestModel = AmbRequestModel.fromMap(data['data']);
-    // riderModel = await _riderServices.getRiderById(ambRequestModel.pid);
+    print("MAPPED REQUEST");
+
+    // riderModel = await _riderServices.getRiderById(ambRequestModel.id);
     notifyListeners();
   }
 
@@ -268,26 +277,35 @@ class AppStateProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  changeAmbRequestStatus() {
+    hasNewAmbRequest = false;
+    notifyListeners();
+  }
+
   listenToRequest({String id, BuildContext context}) async {
 //    requestModelFirebase = await _requestServices.getRequestById(id);
     print("======= LISTENING =======");
     requestStream = _requestServices.requestStream().listen((querySnapshot) {
       querySnapshot.docChanges.forEach((doc) {
         if (doc.doc.data()['id'] == id) {
-          requestModelFirebase = RequestModelFirebase.fromSnapshot(doc.doc);
+          ambRequestModelFirebase =
+              AmbRequestModelFirebase.fromSnapshot(doc.doc);
           notifyListeners();
           switch (doc.doc.data()['status']) {
-            case CANCELLED:
+            case AMB_CANCELLED:
               print("====== CANCELELD");
               break;
-            case ACCEPTED:
-              print("====== ACCEPTED");
+            case AMB_COMPLETE:
+              print("====== COMPLETED");
               break;
-            case EXPIRED:
-              print("====== EXPIRED");
+            case AMB_ENROUTE_TO_HOSPITAL:
+              print("====== AMB_ENROUTE_TO_HOSPITAL");
+              break;
+            case AMB_ENROUTE_TO_PATIENT:
+              print("====== AMB_ENROUTE_TO_PATIENT");
               break;
             default:
-              print("==== PEDING");
+              print("==== PENDING");
               break;
           }
         }
@@ -315,8 +333,11 @@ class AppStateProvider with ChangeNotifier {
 
   acceptRequest({String requestId, String driverId}) {
     hasNewRideRequest = false;
-    _requestServices.updateRequest(
-        {"id": requestId, "status": "accepted", "driverId": driverId});
+    _requestServices.updateRequest({
+      "id": requestId,
+      "status": AMB_ENROUTE_TO_PATIENT,
+      "driverId": driverId
+    });
     notifyListeners();
   }
 

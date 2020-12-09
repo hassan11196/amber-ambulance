@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-
 import '../helpers/style.dart';
 import 'custom_text.dart';
 
@@ -38,16 +37,27 @@ class RiderWidget extends StatelessWidget {
                 SizedBox(
                   height: 12,
                 ),
-
                 ListTile(
                   leading: Container(
-                    child:appState.riderModel?.phone  == null ? CircleAvatar(
-                      radius: 30,
-                      child: Icon(Icons.person_outline, size: 25,),
-                    ) : CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(appState.riderModel?.photo),
-                    ),
+                    child: appState.ambRequestModel.caretaker.contactNum == null
+                        ? CircleAvatar(
+                            radius: 30,
+                            child: Icon(
+                              Icons.person_outline,
+                              size: 25,
+                            ),
+                          )
+                        : CircleAvatar(
+                            radius: 30,
+                            child: Icon(
+                              Icons.person_outline,
+                              size: 25,
+                            ),
+                            backgroundImage: NetworkImage(
+                                'https://avatars.dicebear.com/v2/female/a1a7fb6a38b0d3846bc9f02ebafef192.svg'),
+                            // backgroundImage:
+                            //     NetworkImage(appState.riderModel?.photo),
+                          ),
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +65,7 @@ class RiderWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: appState.riderModel.name + "\n",
+                            text: appState.ambRequestModel.patient.name + "\n",
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold)),
                         TextSpan(
@@ -65,14 +75,14 @@ class RiderWidget extends StatelessWidget {
                       ], style: TextStyle(color: black))),
                     ],
                   ),
-
                   trailing: Container(
                       decoration: BoxDecoration(
                           color: Colors.green.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(20)),
                       child: IconButton(
                         onPressed: () {
-                          _service.call(appState.riderModel.phone);
+                          _service.call(
+                              appState.ambRequestModel.caretaker.contactNum);
                         },
                         icon: Icon(Icons.call),
                       )),

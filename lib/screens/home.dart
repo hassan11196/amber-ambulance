@@ -4,7 +4,7 @@ import 'package:cabdriver/helpers/stars_method.dart';
 import 'package:cabdriver/helpers/style.dart';
 import 'package:cabdriver/providers/app_provider.dart';
 import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/screens/amb_requet.dart';
+import 'package:cabdriver/screens/amb_request.dart';
 import 'package:cabdriver/screens/login.dart';
 import 'package:cabdriver/screens/ride_request.dart';
 import 'package:cabdriver/screens/splash.dart';
@@ -156,8 +156,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return RideRequestScreen();
     }
     switch (appState.hasNewAmbRequest) {
-      case false:
-        return home;
+      // case false:
+      //   return home;
       case true:
         return AmbRequestScreen();
       default:

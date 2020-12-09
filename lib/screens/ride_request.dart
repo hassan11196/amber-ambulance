@@ -17,13 +17,14 @@ class RideRequestScreen extends StatefulWidget {
 }
 
 class _RideRequestScreenState extends State<RideRequestScreen> {
-
   @override
   void initState() {
     super.initState();
-    AppStateProvider _state = Provider.of<AppStateProvider>(context, listen: false);
+    AppStateProvider _state =
+        Provider.of<AppStateProvider>(context, listen: false);
     _state.listenToRequest(id: _state.rideRequestModel.id, context: context);
   }
+
   @override
   Widget build(BuildContext context) {
     AppStateProvider appState = Provider.of<AppStateProvider>(context);
@@ -93,7 +94,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomText(
-                    text: "Destiation",
+                    text: "Destination",
                     color: grey,
                   ),
                 ],
@@ -157,7 +158,7 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                 CustomBtn(
                   text: "Accept",
                   onTap: () async {
-                    if (appState.requestModelFirebase.status != "pending") {
+                    if (appState.ambRequestModelFirebase.status != "pending") {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -189,74 +190,78 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
                           requestId: appState.rideRequestModel.id,
                           driverId: userProvider.userModel.id);
                       appState.changeWidgetShowed(showWidget: Show.RIDER);
-                      appState.sendRequest(coordinates: appState.requestModelFirebase.getCoordinates());
-//                      showDialog(
-//                          context: context,
-//                          builder: (BuildContext context) {
-//                            return Dialog(
-//                              shape: RoundedRectangleBorder(
-//                                  borderRadius: BorderRadius.circular(
-//                                      20.0)), //this right here
-//                              child: Container(
-//                                height: 200,
-//                                child: Padding(
-//                                  padding: const EdgeInsets.all(12.0),
-//                                  child: Column(
-//                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                    crossAxisAlignment:
-//                                        CrossAxisAlignment.start,
-//                                    children: [
-//                                      SpinKitWave(
-//                                        color: black,
-//                                        size: 30,
-//                                      ),
-//                                      SizedBox(
-//                                        height: 10,
-//                                      ),
-//                                      Row(
-//                                        mainAxisAlignment:
-//                                            MainAxisAlignment.center,
-//                                        children: [
-//                                          CustomText(
-//                                              text:
-//                                                  "Awaiting rider confirmation"),
-//                                        ],
-//                                      ),
-//                                      SizedBox(
-//                                        height: 30,
-//                                      ),
-//                                      LinearPercentIndicator(
-//                                        lineHeight: 4,
-//                                        animation: true,
-//                                        animationDuration: 100000,
-//                                        percent: 1,
-//                                        backgroundColor:
-//                                            Colors.grey.withOpacity(0.2),
-//                                        progressColor: Colors.deepOrange,
-//                                      ),
-//                                      SizedBox(
-//                                        height: 20,
-//                                      ),
-//                                      Row(
-//                                        mainAxisAlignment:
-//                                            MainAxisAlignment.center,
-//                                        children: [
-//                                          FlatButton(
-//                                              onPressed: () {
-//                                                appState.cancelRequest(requestId: appState.rideRequestModel.id);
-//                                              },
-//                                              child: CustomText(
-//                                                text: "Cancel",
-//                                                color: Colors.deepOrange,
-//                                              )),
-//                                        ],
-//                                      )
-//                                    ],
-//                                  ),
-//                                ),
-//                              ),
-//                            );
-//                          });
+                      appState.sendRequest(
+                          coordinates: appState.ambRequestModelFirebase
+                              .getCoordinates());
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      20.0)), //this right here
+                              child: Container(
+                                height: 200,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SpinKitWave(
+                                        color: black,
+                                        size: 30,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CustomText(
+                                              text:
+                                                  "Awaiting rider confirmation"),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      LinearPercentIndicator(
+                                        lineHeight: 4,
+                                        animation: true,
+                                        animationDuration: 100000,
+                                        percent: 1,
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.2),
+                                        progressColor: Colors.deepOrange,
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          FlatButton(
+                                              onPressed: () {
+                                                appState.cancelRequest(
+                                                    requestId: appState
+                                                        .rideRequestModel.id);
+                                              },
+                                              child: CustomText(
+                                                text: "Cancel",
+                                                color: Colors.deepOrange,
+                                              )),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
                     }
                   },
                   bgColor: green,
@@ -278,6 +283,4 @@ class _RideRequestScreenState extends State<RideRequestScreen> {
       ),
     ));
   }
-
-
 }
