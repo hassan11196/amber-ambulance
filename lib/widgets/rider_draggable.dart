@@ -65,7 +65,11 @@ class RiderWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: appState.ambRequestModel.patient.name + "\n",
+                            text: "Patient : " +
+                                appState.ambRequestModel.patient.name +
+                                "\n" +
+                                "Attendant : " +
+                                appState.ambRequestModel.caretaker.name,
                             style: TextStyle(
                                 fontSize: 17, fontWeight: FontWeight.bold)),
                         TextSpan(
@@ -132,7 +136,8 @@ class RiderWidget extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: "25th avenue, flutter street \n\n\n",
+                          text: appState.ambRequestModel.pickup.landmarks[0] +
+                              " \n\n\n",
                           style: TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
                       TextSpan(
@@ -140,7 +145,8 @@ class RiderWidget extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16)),
                       TextSpan(
-                          text: "${appState.rideRequestModel?.destination} \n",
+                          text:
+                              "${appState.ambRequestModel?.destination.name} \n",
                           style: TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 16)),
                     ], style: TextStyle(color: black))),

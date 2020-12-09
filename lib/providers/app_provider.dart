@@ -107,6 +107,8 @@ class AppStateProvider with ChangeNotifier {
       _userServices.updateUserData(values);
       await prefs.setDouble('lat', updatedPosition.latitude);
       await prefs.setDouble('lng', updatedPosition.longitude);
+    } else {
+      print("Very Near" + distance.toString());
     }
   }
 
@@ -265,7 +267,6 @@ class AppStateProvider with ChangeNotifier {
     // riderModel = await _riderServices.getRiderById(rideRequestModel.userId);
 
     ambRequestModel = AmbRequestModel.fromMap(data['data']);
-    print("MAPPED REQUEST");
 
     // riderModel = await _riderServices.getRiderById(ambRequestModel.id);
     notifyListeners();
