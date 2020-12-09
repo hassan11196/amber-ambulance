@@ -65,7 +65,10 @@ class RiderWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: "Patient : " +
+                            text: appState.ambRequestModelFirebase.status
+                                    .split("_")
+                                    .join(" ") +
+                                "\nPatient : " +
                                 appState.ambRequestModel.patient.name +
                                 "\n" +
                                 "Attendant : " +

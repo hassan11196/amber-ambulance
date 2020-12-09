@@ -5,9 +5,11 @@ import 'package:cabdriver/helpers/style.dart';
 import 'package:cabdriver/providers/app_provider.dart';
 import 'package:cabdriver/providers/user.dart';
 import 'package:cabdriver/screens/amb_request.dart';
+import 'package:cabdriver/screens/end_transport.dart';
 import 'package:cabdriver/screens/login.dart';
 import 'package:cabdriver/screens/ride_request.dart';
 import 'package:cabdriver/screens/splash.dart';
+import 'package:cabdriver/screens/start_transport.dart';
 import 'package:cabdriver/widgets/custom_text.dart';
 import 'package:cabdriver/widgets/loading.dart';
 import 'package:cabdriver/widgets/rider_draggable.dart';
@@ -155,6 +157,15 @@ class _MyHomePageState extends State<MyHomePage> {
       case true:
         return RideRequestScreen();
     }
+    if (appState.showArrivedAtPatientScreen) {
+      return StartTransportScreen();
+    }
+    if (appState.showArrivedAtHospitalScreen) {
+      return EndTransportScreen();
+    }
+    // if (appState.showArrivedAtPatientScreen) {
+    //   return StartTransportScreen();
+    // }
     switch (appState.hasNewAmbRequest) {
       // case false:
       //   return home;

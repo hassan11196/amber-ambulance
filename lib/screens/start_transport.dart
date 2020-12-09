@@ -1,8 +1,5 @@
 import 'package:cabdriver/helpers/stars_method.dart';
-
 import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/models/amb_Request.dart';
-
 import 'package:cabdriver/providers/app_provider.dart';
 import 'package:cabdriver/providers/user.dart';
 import 'package:cabdriver/widgets/custom_btn.dart';
@@ -14,12 +11,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class AmbRequestScreen extends StatefulWidget {
+class StartTransportScreen extends StatefulWidget {
   @override
-  _AmbRequestScreenState createState() => _AmbRequestScreenState();
+  _StartTransportScreenState createState() => _StartTransportScreenState();
 }
 
-class _AmbRequestScreenState extends State<AmbRequestScreen> {
+class _StartTransportScreenState extends State<StartTransportScreen> {
   @override
   void initState() {
     super.initState();
@@ -40,7 +37,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
         elevation: 0,
         centerTitle: true,
         title: CustomText(
-          text: "New Ambulance Request",
+          text: "Start Transport To Hospital",
           size: 19,
           weight: FontWeight.bold,
         ),
@@ -58,7 +55,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                       color: Colors.grey.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(40)),
                   child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
+                    backgroundColor: Colors.deepOrange,
                     radius: 45,
                     child: Icon(
                       Icons.person,
@@ -67,21 +64,6 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                     ),
                   ),
                 ),
-                // if (appState.riderModel.photo == null)
-                //   Container(
-                //     decoration: BoxDecoration(
-                //         color: Colors.grey.withOpacity(0.5),
-                //         borderRadius: BorderRadius.circular(40)),
-                //     child: CircleAvatar(
-                //       backgroundColor: Colors.transparent,
-                //       radius: 45,
-                //       child: Icon(
-                //         Icons.person,
-                //         size: 65,
-                //         color: white,
-                //       ),
-                //     ),
-                //   ),
                 // if (appState.riderModel.photo != null)
                 //   Container(
                 //     decoration: BoxDecoration(
@@ -99,7 +81,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomText(
-                    text: appState.ambRequestModel.patient.name ?? "Patient"),
+                    text: appState.ambRequestModel?.patient?.name ?? "Nada"),
               ],
             ),
             SizedBox(height: 10),
@@ -112,7 +94,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomText(
-                    text: "Pickup",
+                    text: "Destination",
                     color: grey,
                   ),
                 ],
@@ -120,12 +102,12 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
               subtitle: FlatButton.icon(
                   onPressed: () async {
                     LatLng destinationCoordiates = LatLng(
-                        appState.ambRequestModel.pickup.position.lat,
-                        (appState.ambRequestModel.pickup.position.lng));
+                        appState.ambRequestModel.destination.position.lat,
+                        appState.ambRequestModel.destination.position.lng);
                     appState.addLocationMarker(
                         destinationCoordiates,
-                        appState.ambRequestModel.pickup.landmarks[0] ?? "Nada",
-                        "Pickup Location");
+                        appState.ambRequestModel.destination.name ?? "Nada",
+                        "Destination Location");
                     showModalBottomSheet(
                         context: context,
                         builder: (BuildContext bc) {
@@ -150,8 +132,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                     Icons.location_on,
                   ),
                   label: CustomText(
-                    text: appState.ambRequestModel?.pickup.landmarks[0] ??
-                        "Undefined",
+                    text: appState.ambRequestModel?.destination.name ?? "Nada",
                     weight: FontWeight.bold,
                   )),
             ),
@@ -159,15 +140,14 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // FlatButton.icon(
-                //     onPressed: null,
-                //     icon: Icon(Icons.flag),
-                //     label: Text('User is near by')),
-                // FlatButton.icon(
-                //     onPressed: null,
-                //     icon: Icon(Icons.attach_money),
-                //     label: Text(
-                //         "${appState.ambRequestModel.distance.value / 500} ")),
+                FlatButton.icon(
+                    onPressed: null,
+                    icon: Icon(Icons.flag),
+                    label: Text('User is near by')),
+                FlatButton.icon(
+                    onPressed: null,
+                    icon: Icon(Icons.attach_money),
+                    label: Text("PKR {300} ")),
               ],
             ),
             Divider(),
@@ -177,7 +157,8 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                 CustomBtn(
                   text: "Accept",
                   onTap: () async {
-                    if (appState.ambRequestModelFirebase.status != "PENDING") {
+                    if (appState.ambRequestModelFirebase.status !=
+                        "ENROUTE_TO_PATIENT") {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -204,95 +185,97 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                           });
                     } else {
                       appState.clearMarkers();
-                      appState.changeAmbRequestStatus();
-                      appState.acceptRequest(
+
+                      appState.changeToTransportRequest(
                           requestId: appState.ambRequestModel.id,
                           driverId: userProvider.userModel.id);
                       appState.changeWidgetShowed(showWidget: Show.RIDER);
                       appState.sendRequest(
                           coordinates: appState.ambRequestModelFirebase
-                              .getCoordinates());
-//                      showDialog(
-//                          context: context,
-//                          builder: (BuildContext context) {
-//                            return Dialog(
-//                              shape: RoundedRectangleBorder(
-//                                  borderRadius: BorderRadius.circular(
-//                                      20.0)), //this right here
-//                              child: Container(
-//                                height: 200,
-//                                child: Padding(
-//                                  padding: const EdgeInsets.all(12.0),
-//                                  child: Column(
-//                                    mainAxisAlignment: MainAxisAlignment.center,
-//                                    crossAxisAlignment:
-//                                        CrossAxisAlignment.start,
-//                                    children: [
-//                                      SpinKitWave(
-//                                        color: black,
-//                                        size: 30,
-//                                      ),
-//                                      SizedBox(
-//                                        height: 10,
-//                                      ),
-//                                      Row(
-//                                        mainAxisAlignment:
-//                                            MainAxisAlignment.center,
-//                                        children: [
-//                                          CustomText(
-//                                              text:
-//                                                  "Awaiting rider confirmation"),
-//                                        ],
-//                                      ),
-//                                      SizedBox(
-//                                        height: 30,
-//                                      ),
-//                                      LinearPercentIndicator(
-//                                        lineHeight: 4,
-//                                        animation: true,
-//                                        animationDuration: 100000,
-//                                        percent: 1,
-//                                        backgroundColor:
-//                                            Colors.grey.withOpacity(0.2),
-//                                        progressColor: Colors.deepOrange,
-//                                      ),
-//                                      SizedBox(
-//                                        height: 20,
-//                                      ),
-//                                      Row(
-//                                        mainAxisAlignment:
-//                                            MainAxisAlignment.center,
-//                                        children: [
-//                                          FlatButton(
-//                                              onPressed: () {
-//                                                appState.cancelRequest(requestId: appState.AmbRequestModel.id);
-//                                              },
-//                                              child: CustomText(
-//                                                text: "Cancel",
-//                                                color: Colors.deepOrange,
-//                                              )),
-//                                        ],
-//                                      )
-//                                    ],
-//                                  ),
-//                                ),
-//                              ),
-//                            );
-//                          });
+                              .getDestCoordinates());
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (BuildContext context) {
+                      //       return Dialog(
+                      //         shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(
+                      //                 20.0)), //this right here
+                      //         child: Container(
+                      //           height: 200,
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.all(12.0),
+                      //             child: Column(
+                      //               mainAxisAlignment: MainAxisAlignment.center,
+                      //               crossAxisAlignment:
+                      //                   CrossAxisAlignment.start,
+                      //               children: [
+                      //                 SpinKitWave(
+                      //                   color: black,
+                      //                   size: 30,
+                      //                 ),
+                      //                 SizedBox(
+                      //                   height: 10,
+                      //                 ),
+                      //                 Row(
+                      //                   mainAxisAlignment:
+                      //                       MainAxisAlignment.center,
+                      //                   children: [
+                      //                     CustomText(
+                      //                         text:
+                      //                             "Awaiting rider confirmation"),
+                      //                   ],
+                      //                 ),
+                      //                 SizedBox(
+                      //                   height: 30,
+                      //                 ),
+                      //                 LinearPercentIndicator(
+                      //                   lineHeight: 4,
+                      //                   animation: true,
+                      //                   animationDuration: 100000,
+                      //                   percent: 1,
+                      //                   backgroundColor:
+                      //                       Colors.grey.withOpacity(0.2),
+                      //                   progressColor: Colors.deepOrange,
+                      //                 ),
+                      //                 SizedBox(
+                      //                   height: 20,
+                      //                 ),
+                      //                 Row(
+                      //                   mainAxisAlignment:
+                      //                       MainAxisAlignment.center,
+                      //                   children: [
+                      //                     FlatButton(
+                      //                         onPressed: () {
+                      //                           appState.cancelRequest(
+                      //                               requestId: appState
+                      //                                   .ambRequestModel.id);
+                      //                         },
+                      //                         child: CustomText(
+                      //                           text: "Cancel",
+                      //                           color: Colors.deepOrange,
+                      //                         )),
+                      //                   ],
+                      //                 )
+                      //               ],
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     });
                     }
                   },
                   bgColor: green,
                   shadowColor: Colors.greenAccent,
                 ),
-                CustomBtn(
-                  text: "Reject",
-                  onTap: () {
-                    appState.clearMarkers();
-                    appState.changeAmbRequestStatus();
-                  },
-                  bgColor: red,
-                  shadowColor: Colors.redAccent,
-                )
+                // CustomBtn(
+                //   text: "Reject",
+                //   onTap: () {
+                //     appState.clearMarkers();
+                //     appState.changeRideRequestStatus();
+                //   },
+                //   bgColor: red,
+                //   shadowColor: Colors.redAccent,
+                // )
               ],
             ),
           ],

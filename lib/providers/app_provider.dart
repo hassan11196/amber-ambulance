@@ -55,6 +55,8 @@ class AppStateProvider with ChangeNotifier {
   Location location = new Location();
   bool hasNewRideRequest = false;
   bool hasNewAmbRequest = false;
+  bool showArrivedAtPatientScreen = false;
+  bool showArrivedAtHospitalScreen = false;
   UserServices _userServices = UserServices();
   RideRequestModel rideRequestModel;
   AmbRequestModel ambRequestModel;
@@ -107,8 +109,30 @@ class AppStateProvider with ChangeNotifier {
       _userServices.updateUserData(values);
       await prefs.setDouble('lat', updatedPosition.latitude);
       await prefs.setDouble('lng', updatedPosition.longitude);
-    } else {
-      print("Very Near" + distance.toString());
+    }
+
+    if (ambRequestModelFirebase?.status == AMB_ENROUTE_TO_PATIENT) {
+      double distance_bw_dest = await Geolocator().distanceBetween(
+          updatedPosition.latitude,
+          updatedPosition.longitude,
+          ambRequestModelFirebase.pickup.position.lat,
+          ambRequestModelFirebase.pickup.position.lng);
+      print("Distance to patient" + distance.toString());
+      if (distance_bw_dest <= 30) {
+        print("Very Near" + distance.toString());
+        showArrivedAtPatientScreen = true;
+      }
+    } else if (ambRequestModelFirebase?.status == AMB_ENROUTE_TO_HOSPITAL) {
+      double distance_bw_dest = await Geolocator().distanceBetween(
+          updatedPosition.latitude,
+          updatedPosition.longitude,
+          ambRequestModelFirebase.destination.position.lat,
+          ambRequestModelFirebase.destination.position.lng);
+      print("Distance to hospital" + distance.toString());
+      if (distance_bw_dest <= 30) {
+        print("Very Near" + distance.toString());
+        showArrivedAtHospitalScreen = true;
+      }
     }
   }
 
@@ -339,6 +363,23 @@ class AppStateProvider with ChangeNotifier {
       "status": AMB_ENROUTE_TO_PATIENT,
       "driverId": driverId
     });
+    notifyListeners();
+  }
+
+  changeToTransportRequest({String requestId, String driverId}) {
+    showArrivedAtPatientScreen = false;
+    _requestServices.updateRequest({
+      "id": requestId,
+      "status": AMB_ENROUTE_TO_HOSPITAL,
+      "driverId": driverId
+    });
+    notifyListeners();
+  }
+
+  EndTransportRequest({String requestId, String driverId}) {
+    showArrivedAtHospitalScreen = false;
+    _requestServices.updateRequest(
+        {"id": requestId, "status": AMB_COMPLETE, "driverId": driverId});
     notifyListeners();
   }
 

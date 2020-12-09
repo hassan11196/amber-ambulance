@@ -1,5 +1,6 @@
 import 'package:cabdriver/models/Clocation.dart';
 import 'package:cabdriver/models/patient.dart';
+import 'package:cabdriver/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -17,6 +18,7 @@ class AmbRequestModel {
   static const DISTANCE = "distance";
   static const STATUS = "status";
   static const SPECIAL_NEEDS = "special_needs";
+  static const DRIVERID = "driverID";
 
   String _id;
   Caretaker _caretaker;
@@ -28,6 +30,8 @@ class AmbRequestModel {
   List<String> _specialNeeds;
   String _distance;
   String _status;
+
+  String _driverId;
 
   String get id => _id;
 
@@ -51,6 +55,8 @@ class AmbRequestModel {
   set distance(String distance) => _distance = distance;
   String get status => _status;
 
+  String get driverId => _driverId;
+
   AmbRequestModel.fromMap(Map json) {
     _id = json['id'];
     _caretaker = json[CARETAKER] != null
@@ -70,6 +76,7 @@ class AmbRequestModel {
     _specialNeeds = jsonDecode(json[SPECIAL_NEEDS]).cast<String>();
     _distance = json[DISTANCE];
     _status = json[STATUS];
+    _driverId = json[DRIVERID];
   }
 }
 
@@ -84,6 +91,7 @@ class AmbRequestModelFirebase {
   static const DISTANCE = "distance";
   static const STATUS = "status";
   static const SPECIAL_NEEDS = "special_needs";
+  static const DRIVERID = "driverId";
 
   String _id;
   Caretaker _caretaker;
@@ -96,7 +104,10 @@ class AmbRequestModelFirebase {
   String _distance;
   String _status;
 
+  String _driverId;
+
   String get id => _id;
+  String get driver => _driverId;
 
   Caretaker get caretaker => _caretaker;
   set caretaker(Caretaker caretaker) => _caretaker = caretaker;
@@ -138,7 +149,10 @@ class AmbRequestModelFirebase {
     _reasonForTransport = snapshot.data()[REASON_FOR_TRANSPORT];
     // _specialNeeds = jsonDecode(snapshot.data()[SPECIAL_NEEDS]).cast<String>();
     _distance = snapshot.data()[DISTANCE];
+    _driverId = snapshot.data()[DRIVERID];
   }
 
   LatLng getCoordinates() => LatLng(_pickup.position.lat, _pickup.position.lng);
+  LatLng getDestCoordinates() =>
+      LatLng(_destination.position.lat, _destination.position.lng);
 }
