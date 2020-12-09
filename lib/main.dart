@@ -1,7 +1,7 @@
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/screens/login.dart';
-import 'package:cabdriver/screens/splash.dart';
+import 'package:AmbER/providers/app_provider.dart';
+import 'package:AmbER/providers/user.dart';
+import 'package:AmbER/screens/login.dart';
+import 'package:AmbER/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'helpers/constants.dart';
 import 'locators/service_locator.dart';

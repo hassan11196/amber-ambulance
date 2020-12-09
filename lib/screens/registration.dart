@@ -1,9 +1,9 @@
-import 'package:cabdriver/helpers/screen_navigation.dart';
-import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/widgets/custom_text.dart';
-import 'package:cabdriver/widgets/loading.dart';
+import 'package:AmbER/helpers/screen_navigation.dart';
+import 'package:AmbER/helpers/style.dart';
+import 'package:AmbER/providers/app_provider.dart';
+import 'package:AmbER/providers/user.dart';
+import 'package:AmbER/widgets/custom_text.dart';
+import 'package:AmbER/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

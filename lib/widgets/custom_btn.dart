@@ -1,4 +1,4 @@
-import 'package:cabdriver/helpers/style.dart';
+import 'package:AmbER/helpers/style.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_text.dart';

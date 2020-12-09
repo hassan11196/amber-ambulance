@@ -1,18 +1,18 @@
-import 'package:cabdriver/helpers/constants.dart';
-import 'package:cabdriver/helpers/screen_navigation.dart';
-import 'package:cabdriver/helpers/stars_method.dart';
-import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/screens/amb_request.dart';
-import 'package:cabdriver/screens/end_transport.dart';
-import 'package:cabdriver/screens/login.dart';
-import 'package:cabdriver/screens/ride_request.dart';
-import 'package:cabdriver/screens/splash.dart';
-import 'package:cabdriver/screens/start_transport.dart';
-import 'package:cabdriver/widgets/custom_text.dart';
-import 'package:cabdriver/widgets/loading.dart';
-import 'package:cabdriver/widgets/rider_draggable.dart';
+import 'package:AmbER/helpers/constants.dart';
+import 'package:AmbER/helpers/screen_navigation.dart';
+import 'package:AmbER/helpers/stars_method.dart';
+import 'package:AmbER/helpers/style.dart';
+import 'package:AmbER/providers/app_provider.dart';
+import 'package:AmbER/providers/user.dart';
+import 'package:AmbER/screens/amb_request.dart';
+import 'package:AmbER/screens/end_transport.dart';
+import 'package:AmbER/screens/login.dart';
+import 'package:AmbER/screens/ride_request.dart';
+import 'package:AmbER/screens/splash.dart';
+import 'package:AmbER/screens/start_transport.dart';
+import 'package:AmbER/widgets/custom_text.dart';
+import 'package:AmbER/widgets/loading.dart';
+import 'package:AmbER/widgets/rider_draggable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -135,9 +135,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     size: 18,
                                     weight: FontWeight.bold,
                                   ),
-                                  stars(
-                                      rating: userProvider.userModel.rating,
-                                      votes: userProvider.userModel.votes)
+                                  // stars(
+                                  //     rating: userProvider.userModel.rating,
+                                  //     votes: userProvider.userModel.votes)
                                 ],
                               ),
                             ),

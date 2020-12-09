@@ -1,13 +1,13 @@
-import 'package:cabdriver/helpers/stars_method.dart';
+import 'package:AmbER/helpers/stars_method.dart';
 
-import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/models/amb_Request.dart';
+import 'package:AmbER/helpers/style.dart';
+import 'package:AmbER/models/amb_Request.dart';
 
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/widgets/custom_btn.dart';
-import 'package:cabdriver/widgets/custom_text.dart';
-import 'package:cabdriver/widgets/stars.dart';
+import 'package:AmbER/providers/app_provider.dart';
+import 'package:AmbER/providers/user.dart';
+import 'package:AmbER/widgets/custom_btn.dart';
+import 'package:AmbER/widgets/custom_text.dart';
+import 'package:AmbER/widgets/stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -177,7 +177,7 @@ class _AmbRequestScreenState extends State<AmbRequestScreen> {
                 CustomBtn(
                   text: "Accept",
                   onTap: () async {
-                    if (appState.ambRequestModelFirebase.status != "PENDING") {
+                    if (appState.ambRequestModel?.status != "PENDING") {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {

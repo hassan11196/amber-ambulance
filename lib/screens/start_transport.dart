@@ -1,10 +1,10 @@
-import 'package:cabdriver/helpers/stars_method.dart';
-import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/widgets/custom_btn.dart';
-import 'package:cabdriver/widgets/custom_text.dart';
-import 'package:cabdriver/widgets/stars.dart';
+import 'package:AmbER/helpers/stars_method.dart';
+import 'package:AmbER/helpers/style.dart';
+import 'package:AmbER/providers/app_provider.dart';
+import 'package:AmbER/providers/user.dart';
+import 'package:AmbER/widgets/custom_btn.dart';
+import 'package:AmbER/widgets/custom_text.dart';
+import 'package:AmbER/widgets/stars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -157,7 +157,7 @@ class _StartTransportScreenState extends State<StartTransportScreen> {
                 CustomBtn(
                   text: "Accept",
                   onTap: () async {
-                    if (appState.ambRequestModelFirebase.status !=
+                    if (appState.ambRequestModelFirebase?.status !=
                         "ENROUTE_TO_PATIENT") {
                       showDialog(
                           context: context,
@@ -190,9 +190,11 @@ class _StartTransportScreenState extends State<StartTransportScreen> {
                           requestId: appState.ambRequestModel.id,
                           driverId: userProvider.userModel.id);
                       appState.changeWidgetShowed(showWidget: Show.RIDER);
-                      appState.sendRequest(
-                          coordinates: appState.ambRequestModelFirebase
-                              .getDestCoordinates());
+                      appState.sendTransportRequest(
+                          destCoordinates: appState.ambRequestModelFirebase
+                              .getDestCoordinates(),
+                          pickupCoordinates: appState.ambRequestModelFirebase
+                              .getCoordinates());
                       // showDialog(
                       //     context: context,
                       //     builder: (BuildContext context) {

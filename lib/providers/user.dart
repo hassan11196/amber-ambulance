@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:cabdriver/helpers/constants.dart';
-import 'package:cabdriver/models/user.dart';
-import 'package:cabdriver/services/user.dart';
+import 'package:AmbER/helpers/constants.dart';
+import 'package:AmbER/models/user.dart';
+import 'package:AmbER/services/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -50,7 +50,9 @@ class UserProvider with ChangeNotifier {
               email: email.text.trim(), password: password.text.trim())
           .then((value) async {
         await prefs.setString("id", value.user.uid);
+        saveDeviceToken();
       });
+
       return true;
     } catch (e) {
       _status = Status.Unauthenticated;

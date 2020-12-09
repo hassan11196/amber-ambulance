@@ -1,6 +1,6 @@
-import 'package:cabdriver/locators/service_locator.dart';
-import 'package:cabdriver/providers/app_provider.dart';
-import 'package:cabdriver/services/call_sms.dart';
+import 'package:AmbER/locators/service_locator.dart';
+import 'package:AmbER/providers/app_provider.dart';
+import 'package:AmbER/services/call_sms.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -65,9 +65,11 @@ class RiderWidget extends StatelessWidget {
                       RichText(
                           text: TextSpan(children: [
                         TextSpan(
-                            text: appState.ambRequestModelFirebase.status
-                                    .split("_")
-                                    .join(" ") +
+                            text: (appState.ambRequestModel.status != "PENDING"
+                                    ? appState.ambRequestModel.status
+                                        .split("_")
+                                        .join(" ")
+                                    : " ") +
                                 "\nPatient : " +
                                 appState.ambRequestModel.patient.name +
                                 "\n" +

@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:cabdriver/helpers/constants.dart';
-import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/models/amb_Request.dart';
-import 'package:cabdriver/models/ride_Request.dart';
-import 'package:cabdriver/models/rider.dart';
-import 'package:cabdriver/models/route.dart';
-import 'package:cabdriver/services/map_requests.dart';
-import 'package:cabdriver/services/ride_request.dart';
-import 'package:cabdriver/services/rider.dart';
-import 'package:cabdriver/services/user.dart';
+import 'package:AmbER/helpers/constants.dart';
+import 'package:AmbER/helpers/style.dart';
+import 'package:AmbER/models/amb_Request.dart';
+import 'package:AmbER/models/ride_Request.dart';
+import 'package:AmbER/models/rider.dart';
+import 'package:AmbER/models/route.dart';
+import 'package:AmbER/services/map_requests.dart';
+import 'package:AmbER/services/ride_request.dart';
+import 'package:AmbER/services/rider.dart';
+import 'package:AmbER/services/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -169,6 +169,25 @@ class AppStateProvider with ChangeNotifier {
     LatLng origin = LatLng(position.latitude, position.longitude);
 
     LatLng destination = coordinates;
+    RouteModel route =
+        await _googleMapsServices.getRouteByCoordinates(origin, destination);
+    routeModel = route;
+    addLocationMarker(
+        destination, routeModel.endAddress, routeModel.distance.text);
+    _center = destination;
+    destinationController.text = routeModel.endAddress;
+
+    _createRoute(route.points);
+    notifyListeners();
+  }
+
+  void sendTransportRequest(
+      {String intendedLocation,
+      LatLng destCoordinates,
+      LatLng pickupCoordinates}) async {
+    LatLng origin = pickupCoordinates;
+
+    LatLng destination = destCoordinates;
     RouteModel route =
         await _googleMapsServices.getRouteByCoordinates(origin, destination);
     routeModel = route;

@@ -1,5 +1,5 @@
-import 'package:cabdriver/helpers/constants.dart';
-import 'package:cabdriver/models/rider.dart';
+import 'package:AmbER/helpers/constants.dart';
+import 'package:AmbER/models/rider.dart';
 
 class RiderServices {
   String collection = "users";

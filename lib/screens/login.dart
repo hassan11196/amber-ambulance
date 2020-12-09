@@ -1,9 +1,9 @@
-import 'package:cabdriver/helpers/screen_navigation.dart';
-import 'package:cabdriver/helpers/style.dart';
-import 'package:cabdriver/providers/user.dart';
-import 'package:cabdriver/screens/registration.dart';
-import 'package:cabdriver/widgets/custom_text.dart';
-import 'package:cabdriver/widgets/loading.dart';
+import 'package:AmbER/helpers/screen_navigation.dart';
+import 'package:AmbER/helpers/style.dart';
+import 'package:AmbER/providers/user.dart';
+import 'package:AmbER/screens/registration.dart';
+import 'package:AmbER/widgets/custom_text.dart';
+import 'package:AmbER/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,12 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 10),
                         child: TextFormField(
-                          initialValue: "spam11196@gmail.com",
+                          // initialValue: "spam11196@gmail.com",
                           controller: authProvider.email,
                           decoration: InputDecoration(
                               hintStyle: TextStyle(color: white),
                               border: InputBorder.none,
-                              hintText: "Email",
+                              hintText: "Email - use spam11196@gmail.com",
                               icon: Icon(
                                 Icons.email,
                                 color: white,
@@ -88,12 +88,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 10),
                         child: TextFormField(
-                          initialValue: "shahmeer",
+                          // initialValue: "shahmeer",
                           controller: authProvider.password,
                           decoration: InputDecoration(
                               hintStyle: TextStyle(color: white),
                               border: InputBorder.none,
-                              hintText: "Password",
+                              hintText: "Password - use shahmeer",
                               icon: Icon(
                                 Icons.lock,
                                 color: white,

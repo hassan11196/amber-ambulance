@@ -1,4 +1,4 @@
-import 'package:cabdriver/widgets/stars.dart';
+import 'package:AmbER/widgets/stars.dart';
 
 stars({int votes, double rating}) {
   if (votes == 0) {
